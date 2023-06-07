@@ -10,7 +10,7 @@
 
 body {
     font-family: "Roboto", sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     color: var(--body-text-color);
 }
 
@@ -39,7 +39,6 @@ input[type="email"] {
 
 .btn-theme {
     height: 58px;
-    font-size: 13px;
     background-color: var(--primary-color);
     border: none;
 }

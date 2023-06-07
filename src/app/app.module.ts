@@ -17,10 +17,13 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FormsModule } from '@angular/forms';
-import { AllPostComponent } from './all-post/all-post.component';
-import { NewPostComponent } from './new-post/new-post.component';
-import { AllPostsComponent } from './post/all-posts/all-posts.component';
-import { NewPostsComponent } from './posts/new-posts/new-posts.component';
+import { AllPostsComponent } from './posts/all-posts/all-posts.component';
+import { NewPostComponent } from './posts/new-post/new-post.component';
+
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { HttpClientModule } from '@angular/common/http';
+
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -29,10 +32,8 @@ import { NewPostsComponent } from './posts/new-posts/new-posts.component';
         FooterComponent,
         DashboardComponent,
         CategoriesComponent,
-        AllPostComponent,
-        NewPostComponent,
         AllPostsComponent,
-        NewPostsComponent,
+        NewPostComponent,
     ],
     imports: [
         BrowserModule,
@@ -43,6 +44,9 @@ import { NewPostsComponent } from './posts/new-posts/new-posts.component';
         FormsModule,
         ToastrModule.forRoot(),
         BrowserAnimationsModule,
+        AngularEditorModule,
+        HttpClientModule,
+        ReactiveFormsModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
