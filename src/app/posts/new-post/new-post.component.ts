@@ -5,6 +5,7 @@ import {
   RequiredValidator,
   Validators,
 } from '@angular/forms';
+import { Post } from 'src/app/model/post';
 import { CategoriesService } from 'src/app/services/categories.service';
 
 @Component({
@@ -68,5 +69,26 @@ export class NewPostComponent implements OnInit {
         console.log(`${control} is Invalid`);
       }
     }
+  }
+  onPostSubmit() {
+    console.log('in onPostSubmit');
+    console.log(this.postForm.value);
+
+    const postData: Post = {
+      title: this.postForm.value.title,
+      permalink: this.postForm.value.permalink,
+      category: {
+        categoryId: this.categoryList[this.postForm.value.category].id,
+        category: this.categoryList[this.postForm.value.category].data.category,
+      },
+      postImgPath: this.postForm.value.postImg,
+      excerpt: this.postForm.value.excerpt,
+      content: this.postForm.value.content,
+      isFeatured: false,
+      views: 0,
+      status: 'New',
+      createdAt: new Date(),
+    };
+    console.log(postData);
   }
 }

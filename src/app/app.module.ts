@@ -23,32 +23,35 @@ import { NewPostComponent } from './posts/new-post/new-post.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule } from '@angular/common/http';
 
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HeaderComponent,
-        FooterComponent,
-        DashboardComponent,
-        CategoriesComponent,
-        AllPostsComponent,
-        NewPostComponent,
-    ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        AngularFirestoreModule,
-        AngularFireModule.initializeApp(environment.fireBaseConfig),
-        AngularFireDatabaseModule,
-        FormsModule,
-        ToastrModule.forRoot(),
-        BrowserAnimationsModule,
-        AngularEditorModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-    ],
-    providers: [],
-    bootstrap: [AppComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    FooterComponent,
+    DashboardComponent,
+    CategoriesComponent,
+    AllPostsComponent,
+    NewPostComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    AngularFirestoreModule,
+    AngularFireModule.initializeApp(environment.fireBaseConfig),
+    AngularFireDatabaseModule,
+    FormsModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
+    AngularEditorModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    AngularFireStorage,
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

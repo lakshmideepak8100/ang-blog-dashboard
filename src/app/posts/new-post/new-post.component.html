@@ -6,7 +6,7 @@
     </div>
   </div>
 
-  <form [formGroup]="postForm">
+  <form [formGroup]="postForm" (ngSubmit)="onPostSubmit()">
     <div class="row">
       <div class="col-md-7">
         <div class="card shadow-effect">
@@ -102,7 +102,10 @@
             }"
           >
             <option value="" disabled>Please select a category</option>
-            <option *ngFor="let item of categoryList" value="{{ item.id }}">
+            <option
+              *ngFor="let item of categoryList; index as i"
+              value="{{ i }}"
+            >
               {{ item.data.category }}
             </option>
           </select>
@@ -120,18 +123,14 @@
         <!--Post Image-->
         <div class="form-group">
           <label for="">Post Image</label>
-          <img
-            [src]="imgSrc"
-            class="form-control img-fluid img-preview"
-            formControlName="postImg"
-          />
+          <img [src]="imgSrc" class="form-control img-fluid img-preview" />
           <input
             type="file"
             class="form-control"
             accept="image/*"
             (change)="previewImage($event)"
             [value]="imgSrc"
-            formControlName="content"
+            formControlName="postImg"
             [ngClass]="{
               'is-invalid': fc['postImg'].touched && !fc['postImg'].valid
             }"
@@ -157,6 +156,7 @@
             <div class="form-group">
               <label for="">Content</label>
               <angular-editor
+                formControlName="content"
                 placeholder="Add your content here"
               ></angular-editor>
 
@@ -175,7 +175,11 @@
       <!--The Content Box start-->
       <!--Buttons Start-->
       <div class="col-md-12 text-center mt-2 mb-5">
-        <button class="btn btn-info" [disabled]="postForm.invalid">
+        <button
+          class="btn btn-info"
+          [disabled]="postForm.invalid"
+          type="submit"
+        >
           Save Post
         </button>
         <button class="btn btn-warning ml-3" routerLink="/posts">
