@@ -56,6 +56,7 @@ export class NewPostComponent implements OnInit {
       this.imgSrc = e.target?.result;
     };
     reader.readAsDataURL($imgEvent.target.files[0]);
+    this.postForm.get('postImg')?.setValue($imgEvent.target.files[0]);
   }
 
   checkTheForm() {
