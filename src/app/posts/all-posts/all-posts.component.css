@@ -1,0 +1,11 @@
+img {
+  width: 150px;
+  height: 100px;
+  transition: scale 0.5s;
+}
+img:hover {
+  scale: 3.5;
+}
+td {
+  width: 200;
+}

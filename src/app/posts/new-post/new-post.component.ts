@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -6,6 +7,7 @@ import {
   Validators,
   FormControl,
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Post } from 'src/app/model/post';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { PostService } from 'src/app/services/post.service';
@@ -22,19 +24,49 @@ export class NewPostComponent implements OnInit {
   categoryList: Array<any> = [];
   postForm!: FormGroup;
   postImg!: any;
-
+  postData!: any;
+  formStatus: string = 'Add New';
+  postId: string = '';
   constructor(
     private categoryService: CategoriesService,
     private fb: FormBuilder,
-    private fireStorage: PostService
+    private fireStorage: PostService,
+    private route: ActivatedRoute
   ) {
-    this.postForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(10)]],
-      permalink: [{ value: ``, disabled: true }],
-      excerpt: ['', [Validators.required, Validators.minLength(10)]],
-      category: ['', Validators.required],
-      postImg: ['', Validators.required],
-      content: ['', Validators.required],
+    this.route.queryParams.subscribe((val) => {
+      this.postId = val['id'];
+      if (this.postId) {
+        this.fireStorage.fetchById(val['id']).subscribe((postData) => {
+          this.postData = postData;
+          this.formStatus = 'Edit';
+          this.imgSrc = this.postData.postImgPath;
+          this.postForm = this.fb.group({
+            title: [
+              this.postData.title,
+              [Validators.required, Validators.minLength(10)],
+            ],
+            permalink: [
+              { value: `${this.postData.permalink}`, disabled: true },
+            ],
+            excerpt: [
+              this.postData.excerpt,
+              [Validators.required, Validators.minLength(10)],
+            ],
+            category: [this.postData.category.id, Validators.required],
+            postImg: ['', Validators.required],
+            content: [this.postData.content, Validators.required],
+          });
+        });
+      } else {
+        this.postForm = this.fb.group({
+          title: ['', [Validators.required, Validators.minLength(10)]],
+          permalink: [{ value: ``, disabled: true }],
+          excerpt: ['', [Validators.required, Validators.minLength(10)]],
+          category: ['', Validators.required],
+          postImg: ['', Validators.required],
+          content: ['', Validators.required],
+        });
+      }
     });
   }
   ngOnInit(): void {
@@ -83,7 +115,21 @@ export class NewPostComponent implements OnInit {
     console.log('in onPostSubmit');
     let raw_data = this.postForm.getRawValue();
     console.log(raw_data.permalink);
-
+    const date: Date = new Date();
+    let crtAt =
+      date.getDate() +
+      '/' +
+      date.getMonth() +
+      '/' +
+      date.getFullYear() +
+      ' ' +
+      date.getHours() +
+      ':' +
+      date.getMinutes() +
+      ':' +
+      date.getSeconds() +
+      ':' +
+      date.getMilliseconds();
     const postData: Post = {
       title: this.postForm.value.title,
       permalink: this.postForm.value.title.replace(/\s/g, '-'), //raw_data.permalink
@@ -97,10 +143,15 @@ export class NewPostComponent implements OnInit {
       isFeatured: false,
       views: 0,
       status: 'New',
-      createdAt: new Date(),
+      createdAt: crtAt,
     };
 
-    this.fireStorage.uploadPost(this.postImg, postData);
+    this.fireStorage.uploadPost(
+      this.postImg,
+      postData,
+      this.formStatus,
+      this.postId
+    );
     this.postForm.reset();
     this.imgSrc = 'assets/imgs/blank_image.png';
     console.log('Leaving onPostSubmit');

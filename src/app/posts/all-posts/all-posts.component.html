@@ -1,19 +1,76 @@
 <div class="container">
-    <div class="row mt-3">
-        <div class="col-md-12">
-            <div class="card shadow-effect bg-secondary-theme mt-5">
-                <div class="card-body text-center">
-                    <h3 class="text-theme-center">All Blog Posts</h3>
-                    <p>From Here you can manage all your blog posts</p>
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <div class="card shadow-effect bg-secondary-theme mt-5">
+        <div class="card-body text-center">
+          <h3 class="text-theme-center">All Blog Posts</h3>
+          <p>From Here you can manage all your blog posts</p>
 
-                    <button class="btn btn-info" routerLink="/posts/new">
-                        Add New Post
-                    </button>
-                    <button class="btn btn-warning ml-2" routerLink="/">
-                        Back to DashBoard
-                    </button>
-                </div>
-            </div>
+          <button class="btn btn-info" routerLink="/posts/new">
+            Add New Post
+          </button>
+          <button class="btn btn-warning ml-2" routerLink="/">
+            Back to DashBoard
+          </button>
         </div>
+      </div>
     </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <div class="card shadow-effect">
+        <div class="card-body">
+          <table class="table row-border hover">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Post Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Excerpt</th>
+                <th>Created Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let post of postList; index as num">
+                <td width="10">{{ num + 1 }}</td>
+                <td>
+                  <img
+                    src="{{ post.data.postImgPath }}"
+                    alt="Post Image"
+                    class="img img-fluid"
+                  />
+                </td>
+                <td>
+                  <b> {{ post.data.title }} </b>
+                </td>
+                <td>
+                  {{ post.data.category.category }}
+                </td>
+                <td>{{ post.data.excerpt }}</td>
+                <td>{{ post.data.createdAt | date : "dd/mm/yy" }}</td>
+                <td>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <button
+                        class="btn btn-warning"
+                        routerLink="/posts/new"
+                        [queryParams]="{ id: post.id }"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                    <div class="col-sm-6">
+                      <button class="btn btn-danger">Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

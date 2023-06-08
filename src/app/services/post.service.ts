@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore/';
 import { ToastrService } from 'ngx-toastr';
 import { Post } from '../model/post';
 import { finalize, map } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +15,16 @@ export class PostService {
   constructor(
     private storage: AngularFireStorage,
     private afs: AngularFirestore,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private route: Router
   ) {}
 
-  uploadPost(selectedImage: any, postData: Post) {
+  uploadPost(
+    selectedImage: any,
+    postData: Post,
+    formStatus: string,
+    id: string
+  ) {
     console.log('In uploadImage');
 
     const filePath = `postsImg/${Date.now()}`;
@@ -32,19 +39,27 @@ export class PostService {
           const downloadURL = fileRef.getDownloadURL();
           downloadURL.subscribe((data) => {
             postData.postImgPath = data;
-            this.afs
-              .collection('posts')
-              .add(postData)
-              .then((docRef) => {
-                this.toastr.success('Post is Uploaded SuccessFully');
-                console.log(docRef);
-              });
+            if (formStatus == 'Add New') {
+              this.saveData(postData);
+            } else if (formStatus == 'Edit') {
+              this.updateById(id, postData);
+            }
           });
         })
       )
       .subscribe();
 
     console.log('Leaving the Upload Post');
+  }
+
+  saveData(postData: Post) {
+    this.afs
+      .collection('posts')
+      .add(postData)
+      .then((docRef) => {
+        this.toastr.success('Post is Uploaded SuccessFully');
+        this.route.navigate(['/posts']);
+      });
   }
   loadData() {
     return this.afs
@@ -61,5 +76,20 @@ export class PostService {
           });
         })
       );
+  }
+
+  fetchById(id: string) {
+    return this.afs.doc(`posts/${id}`).valueChanges();
+  }
+
+  updateById(id: string, postData: Post) {
+    console.log(`posts/${id}`);
+    this.afs
+      .doc(`posts/${id}`)
+      .update(postData)
+      .then(() => {
+        this.toastr.success('Data Updated Successfully');
+        this.route.navigate(['/posts']);
+      });
   }
 }
