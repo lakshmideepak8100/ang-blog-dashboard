@@ -1,11 +1,9 @@
 img {
-  width: 150px;
-  height: 100px;
+  width: 250px;
+  height: 150px;
   transition: scale 0.5s;
 }
 img:hover {
   scale: 3.5;
 }
-td {
-  width: 200;
-}
+

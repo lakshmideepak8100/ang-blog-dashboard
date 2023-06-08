@@ -16,4 +16,17 @@ export class AllPostsComponent implements OnInit {
       console.log(val);
     });
   }
+
+  onDelete(postImgPath: string, postId: string) {
+    this.postService.deleteImage(postImgPath, postId);
+  }
+
+  featuredRegister(postId: string, event: any) {
+    console.log(`postId : ${postId} is featured:${event.target.checked}`);
+
+    const featuredData = {
+      isFeatured: event.target.checked,
+    };
+    this.postService.togglePostFeature(postId, featuredData);
+  }
 }

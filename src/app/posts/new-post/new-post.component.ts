@@ -8,7 +8,7 @@ import {
   FormControl,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Post } from 'src/app/model/post';
+import { Post } from 'src/app/models/post';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { PostService } from 'src/app/services/post.service';
 

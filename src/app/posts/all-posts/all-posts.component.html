@@ -27,15 +27,15 @@
                 <th>Post Image</th>
                 <th>Title</th>
                 <th>Category</th>
-                <th>Excerpt</th>
                 <th>Created Date</th>
                 <th>Actions</th>
+                <th>Featured</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let post of postList; index as num">
                 <td width="10">{{ num + 1 }}</td>
-                <td>
+                <td width="300">
                   <img
                     src="{{ post.data.postImgPath }}"
                     alt="Post Image"
@@ -48,11 +48,10 @@
                 <td>
                   {{ post.data.category.category }}
                 </td>
-                <td>{{ post.data.excerpt }}</td>
                 <td>{{ post.data.createdAt | date : "dd/mm/yy" }}</td>
-                <td>
+                <td width="250">
                   <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-3">
                       <button
                         class="btn btn-warning"
                         routerLink="/posts/new"
@@ -61,9 +60,28 @@
                         Edit
                       </button>
                     </div>
-                    <div class="col-sm-6">
-                      <button class="btn btn-danger">Delete</button>
+                    <div class="col-sm-3">
+                      <button
+                        class="btn btn-danger"
+                        (click)="onDelete(post.data.postImgPath, post.id)"
+                      >
+                        Delete
+                      </button>
                     </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="custom-control custom-switch">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="{{ num + 1 }}"
+                      (change)="featuredRegister(post.id, $event)"
+                      [checked]="post.data.isFeatured"
+                    />
+                    <label class="custom-control-label" for="{{ num + 1 }}"
+                      >Featured</label
+                    >
                   </div>
                 </td>
               </tr>

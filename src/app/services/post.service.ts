@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore/';
 import { ToastrService } from 'ngx-toastr';
-import { Post } from '../model/post';
+import { Post } from '../models/post';
 import { finalize, map } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -90,6 +90,32 @@ export class PostService {
       .then(() => {
         this.toastr.success('Data Updated Successfully');
         this.route.navigate(['/posts']);
+      });
+  }
+
+  deleteImage(postImgPath: string, postid: string) {
+    this.storage.storage
+      .refFromURL(postImgPath)
+      .delete()
+      .then(() => {
+        this.deleteData(postid);
+      });
+  }
+  deleteData(id: string) {
+    this.afs
+      .doc(`posts/${id}`)
+      .delete()
+      .then(() => {
+        this.toastr.warning('The Post is deleted');
+      });
+  }
+
+  togglePostFeature(postId: string, value: any) {
+    this.afs
+      .doc(`posts/${postId}`)
+      .update(value)
+      .then(() => {
+        this.toastr.info('The post is made Featured');
       });
   }
 }
