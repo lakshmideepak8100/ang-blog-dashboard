@@ -22,21 +22,6 @@ export class NewPostComponent implements OnInit {
   categoryList: Array<any> = [];
   postForm!: FormGroup;
   postImg!: any;
-  defaultVals: Post = {
-    title: 'DudhSagarWaterFalls',
-    permalink: this.postPermaLink,
-    category: {
-      categoryId: 'Random',
-      category: 'Random',
-    },
-    postImgPath: '',
-    excerpt: 'Thank you for Presence',
-    content: 'Will Design later',
-    isFeatured: false,
-    views: 0,
-    status: 'New',
-    createdAt: new Date(),
-  };
 
   constructor(
     private categoryService: CategoriesService,
@@ -44,21 +29,12 @@ export class NewPostComponent implements OnInit {
     private fireStorage: PostService
   ) {
     this.postForm = this.fb.group({
-      title: [
-        this.defaultVals.title,
-        [Validators.required, Validators.minLength(10)],
-      ],
-      permalink: [
-        { value: `${this.defaultVals.permalink}`, disabled: true },
-        RequiredValidator,
-      ],
-      excerpt: [
-        this.defaultVals.excerpt,
-        [Validators.required, Validators.minLength(10)],
-      ],
+      title: ['', [Validators.required, Validators.minLength(10)]],
+      permalink: [{ value: ``, disabled: true }],
+      excerpt: ['', [Validators.required, Validators.minLength(10)]],
       category: ['', Validators.required],
       postImg: ['', Validators.required],
-      content: [this.defaultVals.content, Validators.required],
+      content: ['', Validators.required],
     });
   }
   ngOnInit(): void {
@@ -106,9 +82,11 @@ export class NewPostComponent implements OnInit {
   onPostSubmit() {
     console.log('in onPostSubmit');
     let raw_data = this.postForm.getRawValue();
+    console.log(raw_data.permalink);
+
     const postData: Post = {
       title: this.postForm.value.title,
-      permalink: raw_data.permalink,
+      permalink: this.postForm.value.title.replace(/\s/g, '-'), //raw_data.permalink
       category: {
         categoryId: this.categoryList[this.postForm.value.category].id,
         category: this.categoryList[this.postForm.value.category].data.category,
@@ -121,9 +99,10 @@ export class NewPostComponent implements OnInit {
       status: 'New',
       createdAt: new Date(),
     };
-    console.log(postData);
-    console.log(this.postImg);
 
-    this.fireStorage.uploadImage(this.postImg, postData);
+    this.fireStorage.uploadPost(this.postImg, postData);
+    this.postForm.reset();
+    this.imgSrc = 'assets/imgs/blank_image.png';
+    console.log('Leaving onPostSubmit');
   }
 }
