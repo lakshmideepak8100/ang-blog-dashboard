@@ -111,11 +111,18 @@ export class PostService {
   }
 
   togglePostFeature(postId: string, value: any) {
+    let toggle = '';
+    if (value.isFeatured) {
+      toggle = 'The post is made Featured';
+    } else {
+      toggle = 'The post is removed from Featured';
+    }
+
     this.afs
       .doc(`posts/${postId}`)
       .update(value)
       .then(() => {
-        this.toastr.info('The post is made Featured');
+        this.toastr.info(toggle);
       });
   }
 }
