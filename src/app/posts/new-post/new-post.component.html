@@ -49,8 +49,8 @@
                 type="text"
                 class="form-control"
                 name="postPermaLink"
-                [(ngModel)]="postPermaLink"
                 formControlName="permalink"
+                [value]="this.postPermaLink"
               />
             </div>
             <!--Perma Link-->
@@ -129,7 +129,7 @@
             class="form-control"
             accept="image/*"
             (change)="previewImage($event)"
-            [value]="imgSrc"
+            value="imgSrc"
             formControlName="postImg"
             [ngClass]="{
               'is-invalid': fc['postImg'].touched && !fc['postImg'].valid

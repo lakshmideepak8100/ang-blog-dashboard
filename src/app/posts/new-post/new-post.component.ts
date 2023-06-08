@@ -4,9 +4,11 @@ import {
   FormGroup,
   RequiredValidator,
   Validators,
+  FormControl,
 } from '@angular/forms';
 import { Post } from 'src/app/model/post';
 import { CategoriesService } from 'src/app/services/categories.service';
+import { PostService } from 'src/app/services/post.service';
 
 @Component({
   selector: 'app-new-post',
@@ -19,18 +21,44 @@ export class NewPostComponent implements OnInit {
   imgSrc: any = 'assets/imgs/blank_image.png';
   categoryList: Array<any> = [];
   postForm!: FormGroup;
+  postImg!: any;
+  defaultVals: Post = {
+    title: 'DudhSagarWaterFalls',
+    permalink: this.postPermaLink,
+    category: {
+      categoryId: 'Random',
+      category: 'Random',
+    },
+    postImgPath: '',
+    excerpt: 'Thank you for Presence',
+    content: 'Will Design later',
+    isFeatured: false,
+    views: 0,
+    status: 'New',
+    createdAt: new Date(),
+  };
 
   constructor(
     private categoryService: CategoriesService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private fireStorage: PostService
   ) {
     this.postForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(10)]],
-      permalink: [{ value: `${this.postPermaLink}`, disabled: true }],
-      excerpt: ['', [Validators.required, Validators.minLength(10)]],
+      title: [
+        this.defaultVals.title,
+        [Validators.required, Validators.minLength(10)],
+      ],
+      permalink: [
+        { value: `${this.defaultVals.permalink}`, disabled: true },
+        RequiredValidator,
+      ],
+      excerpt: [
+        this.defaultVals.excerpt,
+        [Validators.required, Validators.minLength(10)],
+      ],
       category: ['', Validators.required],
       postImg: ['', Validators.required],
-      content: ['', Validators.required],
+      content: [this.defaultVals.content, Validators.required],
     });
   }
   ngOnInit(): void {
@@ -52,12 +80,17 @@ export class NewPostComponent implements OnInit {
     //   this.imgSrc = URL.createObjectURL($imgEvent.target.files[0]);
     //   console.log(this.imgSrc);
 
+    console.log('In Preview Image method');
     const reader = new FileReader();
     reader.onload = (e) => {
       this.imgSrc = e.target?.result;
     };
     reader.readAsDataURL($imgEvent.target.files[0]);
-    this.postForm.get('postImg')?.setValue($imgEvent.target.files[0]);
+    //this.postForm.get('postImg')?.setValue($imgEvent.target.files[0]);
+    this.postImg = $imgEvent.target.files[0];
+    console.log('In Preview Image method');
+
+    //console.log($imgEvent.target.files[0].type);
   }
 
   checkTheForm() {
@@ -72,11 +105,10 @@ export class NewPostComponent implements OnInit {
   }
   onPostSubmit() {
     console.log('in onPostSubmit');
-    console.log(this.postForm.value);
-
+    let raw_data = this.postForm.getRawValue();
     const postData: Post = {
       title: this.postForm.value.title,
-      permalink: this.postForm.value.permalink,
+      permalink: raw_data.permalink,
       category: {
         categoryId: this.categoryList[this.postForm.value.category].id,
         category: this.categoryList[this.postForm.value.category].data.category,
@@ -90,5 +122,8 @@ export class NewPostComponent implements OnInit {
       createdAt: new Date(),
     };
     console.log(postData);
+    console.log(this.postImg);
+
+    this.fireStorage.uploadImage(this.postImg, postData);
   }
 }

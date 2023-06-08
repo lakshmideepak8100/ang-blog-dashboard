@@ -23,7 +23,7 @@ import { NewPostComponent } from './posts/new-post/new-post.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -49,7 +49,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     AngularEditorModule,
     HttpClientModule,
     ReactiveFormsModule,
-    AngularFireStorage,
+    AngularFireStorageModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
