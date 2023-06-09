@@ -9,22 +9,61 @@
             <p>Please login to your account to add a new post</p>
           </div>
 
-          <form action="">
+          <form action="" #loginForm="ngForm">
             <div class="form-group">
               <input
                 type="email"
                 class="form-control"
                 placeholder="Enter your Email"
+                name="Email"
+                #Email_Valid="ngModel"
+                ngModel
+                required
+                email
+                [ngClass]="{
+                  'is-invalid': Email_Valid.touched && !Email_Valid.valid
+                }"
               />
             </div>
+            <div
+              class="alert alert-danger"
+              *ngIf="Email_Valid.touched && !Email_Valid.valid"
+            >
+              <div *ngIf="Email_Valid.errors?.['required']">
+                Email Cannot be Empty
+              </div>
+
+              <div *ngIf="Email_Valid.errors?.['email']">
+                Enter a valid email
+              </div>
+            </div>
+
             <div class="form-group">
               <input
                 type="password"
                 class="form-control"
                 placeholder="Enter your password"
+                name="password"
+                #Password_Valid="ngModel"
+                ngModel
+                required
+                [ngClass]="{
+                  'is-invalid': Email_Valid.touched && !Email_Valid.valid
+                }"
               />
             </div>
-            <button class="btn btn-info btn-block">Login</button>
+            <div
+              class="alert alert-danger"
+              *ngIf="Email_Valid.touched && !Email_Valid.valid"
+            >
+              Please enter password .
+            </div>
+            <button
+              class="btn btn-info btn-block"
+              [disabled]="!loginForm.valid"
+            >
+              Login
+            </button>
           </form>
         </div>
       </div>
