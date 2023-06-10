@@ -5,13 +5,26 @@ import { CategoriesComponent } from './categories/categories.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AllPostsComponent } from './posts/all-posts/all-posts.component';
 import { NewPostComponent } from './posts/new-post/new-post.component';
+import { AuthGuardService } from './services/auth-guard.service';
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent },
+  { path: '', component: DashboardComponent, canActivate: [AuthGuardService] },
   { path: 'login', component: LoginComponent },
-  { path: 'categories', component: CategoriesComponent },
-  { path: 'posts', component: AllPostsComponent },
-  { path: 'posts/new', component: NewPostComponent },
+  {
+    path: 'categories',
+    component: CategoriesComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'posts',
+    component: AllPostsComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'posts/new',
+    component: NewPostComponent,
+    canActivate: [AuthGuardService],
+  },
 ];
 
 @NgModule({
