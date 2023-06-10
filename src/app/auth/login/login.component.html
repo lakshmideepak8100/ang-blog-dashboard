@@ -9,13 +9,17 @@
             <p>Please login to your account to add a new post</p>
           </div>
 
-          <form action="" #loginForm="ngForm">
+          <form
+            action=""
+            #loginForm="ngForm"
+            (ngSubmit)="onSubmit(loginForm.value)"
+          >
             <div class="form-group">
               <input
                 type="email"
                 class="form-control"
                 placeholder="Enter your Email"
-                name="Email"
+                name="email"
                 #Email_Valid="ngModel"
                 ngModel
                 required
